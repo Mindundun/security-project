@@ -46,7 +46,16 @@ public class CustomSecurityConfig {
         // 3. CSRF 비활성화
         http.csrf(csrf -> csrf.disable());
         
-        // 4. 패스워드 암호화
+        // 폼 기반 로그인 요청 처리
+        http.formLogin(config -> {
+            config.loginProcessingUrl("api/v1/member/login"); // POST
+            config.usernameParameter("email");
+            // config.passwordParameter("password");
+            // config.successHandler(null);
+            // config.failureHandler(null);
+            }
+            
+        );
 
 
 
