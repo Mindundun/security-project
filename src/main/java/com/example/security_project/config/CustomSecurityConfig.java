@@ -1,0 +1,87 @@
+package com.example.security_project.config;
+
+import java.util.Arrays;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import lombok.extern.slf4j.Slf4j;
+
+// Java Config Class
+@Slf4j
+@Configuration
+@EnableWebSecurity // Security를 활성화 하는 annotation
+public class CustomSecurityConfig {
+
+    private final CorsConfigurationSource corsConfigurationSource;
+
+    CustomSecurityConfig(CorsConfigurationSource corsConfigurationSource) {
+        this.corsConfigurationSource = corsConfigurationSource;
+    }
+    
+    // SecurityFilterChain을 Bean으로 등록해야함
+    @Bean 
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+
+        log.info("---------------------------------------------SecurityFilterChain");
+
+        // 1. CORS 설정 활성화
+        http.cors(httpSecurityCorsConfigurer -> {
+            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()); // DI
+        });
+
+        // 2. 세션 비활성화
+        http.sessionManagement(sessionConfig -> 
+            sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // 3. CSRF 비활성화
+        http.csrf(csrf -> csrf.disable());
+        
+        // 4. 패스워드 암호화
+
+
+
+        return http.build();
+    }
+
+    // CORS 설정 활성화
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        // 모든 도메인에 대해 허용
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+
+        // 어떤 메소드를 허용할 것인지 
+        configuration.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // 브라우저에서 자바스크립트로 응답 헤더에 접근하고 싶을 때
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+
+        // 클라우드 인증정보를 요청헤더에 포함할지, 하지만 모든 도메인에 허용하는 경우 아래의 처리는 되지 않음
+        // configuration.setAllowCredentials(true);
+
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
+
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        // 패스워드 암호화(BCrypt 해싱 알고리즘)
+        return new BCryptPasswordEncoder();
+    }
+}

@@ -1,0 +1,45 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: security-project
+
+  # DB 연결 정보
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/db_board?serverTimezone=Asia/Seoul&characterEncoding=utf-8
+    username: react
+    password: Mysql1234!!
+ 
+  # 파일 업로드를 위한 설정
+  servlet:
+    multipart:
+      max-request-size: 30MB  # 클라이언트가 여러 파일을 업로드할 때 요청의 총 크기가 30MB 초과 안됨
+      max-file-size: 10MB     # 개별 업로드 파일의 최대 크기
+      location: /tmp/upload   # 임시 디렉토리
+  
+  # 업로드 된 파일의 저장 경로
+  file:
+    upload:
+      path: upload # ./upload
+      
+  # JPA 설정  
+  jpa:
+    hibernate:
+      ddl-auto: update  
+      # show-sql: true     # 콘솔에 출력
+    properties:
+      hibernate:       
+        format_sql: true
+      hibernate.default_batch_fetch_size: 50 # 50 ~ 100, 모든 엔티티에 일괄 로딩(batch fetching)이 적용
+
+# Logging
+logging:
+  level:
+    root: INFO
+    '[org.hibernate.SQL]': DEBUG            # SQL문 로그 출력
+    '[org.hibernate.orm.jdbc.bind]': TRACE  # 중요 : 바인딩된 값 출력
+    '[org.springframework.securityapp]': TRACE # security Logging
+
+
