@@ -4,16 +4,19 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.method.P;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.example.security_project.security.filter.JWTCheckFilter;
 import com.example.security_project.security.handler.ApiAuthenticationFailureHandler;
 import com.example.security_project.security.handler.ApiAuthenticationSuccessHandler;
 
@@ -59,8 +62,15 @@ public class CustomSecurityConfig {
             }
             
         );
+        
+        // JWTCheckFilter를 먼저 처리 후 처리 결과에 따라 UsernamePasswordAuthenticationFilter.class 처리
+        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
+        // 인가(Authorization)
+        http.exceptionHandling(config -> {
+            config.accessDeniedHandler(null); // 권한 없는 상태에서 API 요청 시 실행
 
+        });
 
         return http.build();
     }

@@ -69,7 +69,8 @@ public class JWTCheckFilter extends OncePerRequestFilter{
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(memberDto, password, memberDto.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
+            
+            // 현재 필터 작업이 끝났으니, 다음 필터나 최종 서블릿(예: DispatcherServlet)에게 요청을 넘기라는 의미
             filterChain.doFilter(request, response);
 
         } catch (Exception e) {
