@@ -29,7 +29,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler{
 
         String jsonStr = gson.toJson(Map.of("error", "ERROR_ACCESS_DENIED"));
 
-        response.setContentType("application/json; charset=uft-8");
+        response.setContentType("application/json; charset=utf-8");
         response.setStatus(HttpStatus.FORBIDDEN.value());   // 403 : 권한 부족
 
         PrintWriter pw = response.getWriter();

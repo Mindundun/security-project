@@ -10,9 +10,10 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -24,11 +25,12 @@ public class ItemController {
     
     // 상품 목록 조회
     @GetMapping("/items")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     public ResponseEntity<List<ItemDto>> getItems() {
         
         List<ItemDto> items = itemService.retrieveItems();
 
-        return ResponseEntity.ok().body(items);
+        return ResponseEntity.status(HttpStatus.OK).body(items);
 
     }
     

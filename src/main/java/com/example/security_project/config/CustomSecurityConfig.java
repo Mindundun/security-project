@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.method.P;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -19,6 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.example.security_project.security.filter.JWTCheckFilter;
 import com.example.security_project.security.handler.ApiAuthenticationFailureHandler;
 import com.example.security_project.security.handler.ApiAuthenticationSuccessHandler;
+import com.example.security_project.security.handler.CustomAccessDeniedHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 @EnableWebSecurity // Security를 활성화 하는 annotation
+@EnableMethodSecurity // Method 레벨에서 접근 제한
 public class CustomSecurityConfig {
 
     private final CorsConfigurationSource corsConfigurationSource;
@@ -68,7 +70,7 @@ public class CustomSecurityConfig {
 
         // 인가(Authorization)
         http.exceptionHandling(config -> {
-            config.accessDeniedHandler(null); // 권한 없는 상태에서 API 요청 시 실행
+            config.accessDeniedHandler(new CustomAccessDeniedHandler()); // 권한 없는 상태에서 API 요청 시 실행
 
         });
 
