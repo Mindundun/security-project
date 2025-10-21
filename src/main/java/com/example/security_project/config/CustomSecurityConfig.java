@@ -14,6 +14,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.example.security_project.security.handler.ApiAuthenticationFailureHandler;
+import com.example.security_project.security.handler.ApiAuthenticationSuccessHandler;
+
 import lombok.extern.slf4j.Slf4j;
 
 // Java Config Class
@@ -48,11 +51,11 @@ public class CustomSecurityConfig {
         
         // 폼 기반 로그인 요청 처리
         http.formLogin(config -> {
-            config.loginProcessingUrl("api/v1/member/login"); // POST
+            config.loginProcessingUrl("/api/v1/members/login"); // POST
             config.usernameParameter("email");
             // config.passwordParameter("password");
-            // config.successHandler(null);
-            // config.failureHandler(null);
+            config.successHandler(new ApiAuthenticationSuccessHandler());
+            config.failureHandler(new ApiAuthenticationFailureHandler());
             }
             
         );

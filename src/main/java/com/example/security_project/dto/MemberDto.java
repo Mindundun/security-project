@@ -1,15 +1,21 @@
 package com.example.security_project.dto;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
+@Getter
+@Setter
 public class MemberDto extends User{
     
     private String email;
@@ -30,6 +36,17 @@ public class MemberDto extends User{
         this.password = password;
         this.nickName = nickName;
         this.roleNames = roleNames;
+    }
+
+    // payload(claim)정보
+    public Map<String, Object> getClaims() {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", email);
+        map.put("password", password);
+        map.put("nickName", nickName);
+        map.put("roleNames", roleNames);
+        return map;
     }
 
 }

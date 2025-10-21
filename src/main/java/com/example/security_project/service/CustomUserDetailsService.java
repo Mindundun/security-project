@@ -30,6 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService{
             throw new RuntimeException(email + " Not found.");
         }
 
+        // 인증된 사용자 정보를 담음
         MemberDto memberDto = new MemberDto(member.getEmail(), member.getPassword(), member.getNickName(), 
                                             member.getRoles().stream().map(role -> role.name()).collect(Collectors.toList()));
                                             
