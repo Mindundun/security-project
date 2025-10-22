@@ -36,7 +36,7 @@ public class JWTCheckFilter extends OncePerRequestFilter{
         log.info("================HTTP method : {}", method);
 
         // 추후 경로는 개발 시 추가..
-        if (method.equalsIgnoreCase("OPTIONS") || path.equals("/api/v1/members/login")) {
+        if (method.equalsIgnoreCase("OPTIONS") || path.equals("/api/v1/members/login") || path.startsWith("/api/v1/refresh")) {
             return true; // JWTCkeckFilter를 적용하지 않는다는 의미
         }
         
