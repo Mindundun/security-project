@@ -90,7 +90,7 @@ public class CustomSecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
 
         // 브라우저에서 자바스크립트로 응답 헤더에 접근하고 싶을 때
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
 
         // 클라우드 인증정보를 요청헤더에 포함할지, 하지만 모든 도메인에 허용하는 경우 아래의 처리는 되지 않음
         // configuration.setAllowCredentials(true);
