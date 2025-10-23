@@ -46,10 +46,10 @@ public class ApiAuthenticationSuccessHandler implements AuthenticationSuccessHan
         // Access Token, Refresh Token 생성
         String accessToken = JwtUtil.generateToken(claims, 10);     // 10분
 
-        String refreashToken = JwtUtil.generateToken(claims, 60 * 24);  // 1일
+        String refreshToken = JwtUtil.generateToken(claims, 60 * 24);  // 1일
 
         claims.put("accessToken", accessToken);
-        claims.put("refreashToken", refreashToken);
+        claims.put("refreshToken", refreshToken);
 
         Gson gson = new Gson();
 
